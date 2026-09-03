@@ -5,23 +5,23 @@ Parameterized, synthesizable 4-way set-associative L1 data cache controller in S
 ## Architecture
 
 ```
-                  CPU Interface                          Memory Interface
-              (32-bit, valid/ready)                    (32-bit, valid/ready)
-                      │                                        │
-                      ▼                                        ▼
-        ┌──────────────────────────────────┐
-        │           cache_top              │
-        │                                  │
-        │  ┌──────────┐   ┌────────────┐   │
-        │  │ Tag Array │   │ Data Array │   │
-        │  │ (4-way)   │   │ (4-way)    │   │
-        │  └──────────┘   └────────────┘   │
-        │                                  │
-        │  ┌──────────┐   ┌────────────┐   │
-        │  │ PLRU Tree │   │  FSM       │   │
-        │  │ (3b/set)  │   │  Control   │   │
-        │  └──────────┘   └────────────┘   │
-        └──────────────────────────────────┘
+  CPU Interface                          Memory Interface
+(32-bit, valid/ready)                  (32-bit, valid/ready)
+        |                                      |
+        v                                      v
++--------------------------------------------------+
+|                    cache_top                      |
+|                                                   |
+|   +-----------+            +------------+         |
+|   | Tag Array |            | Data Array |         |
+|   | (4-way)   |            | (4-way)    |         |
+|   +-----------+            +------------+         |
+|                                                   |
+|   +-----------+            +------------+         |
+|   | PLRU Tree |            |    FSM     |         |
+|   | (3b/set)  |            |  Control   |         |
+|   +-----------+            +------------+         |
++--------------------------------------------------+
 ```
 
 ### Address Breakdown (32-bit)
@@ -127,23 +127,25 @@ Fmax sweep from 100–143 MHz confirms 138.8 MHz as the maximum with positive sl
 ```
 l1-cache-controller/
 ├── rtl/
-│   ├── cache_pkg.sv         # Parameters, derived constants, FSM enum
-│   ├── cache_top.sv          # Main FSM + inlined tag/data storage
-│   ├── tag_array.sv          # Tag array (reference, not instantiated)
-│   └── data_array.sv         # Data array (reference, not instantiated)
+│   ├── cache_pkg.sv              # Parameters, derived constants, FSM enum
+│   └── cache_top.sv              # Main FSM + inlined tag/data storage
 ├── tb/
-│   ├── tb_cache_top.sv       # Self-checking testbench (45 tests)
-│   └── mem_model.sv          # Behavioral memory, configurable latency
+│   ├── tb_cache_top.sv           # Self-checking testbench (45 tests)
+│   └── mem_model.sv              # Behavioral memory, configurable latency
 ├── syn/
-│   ├── cache_top_flat.sv     # Flattened SV for Yosys compatibility
-│   ├── run_flow.sh           # Yosys synth + OpenSTA timing automation
-│   ├── sweep_fmax.sh         # Fmax binary sweep script
-│   └── sta.tcl               # OpenSTA timing constraints
+│   ├── cache_top_flat.sv         # Flattened SV for Yosys compatibility
+│   ├── synth_sky130.ys           # Yosys synthesis script (SkyWater 130nm)
+│   ├── synth_asap7.ys            # Yosys synthesis script (ASAP 7nm)
+│   ├── sta.tcl                   # OpenSTA timing constraints (SkyWater)
+│   ├── sta_asap7.tcl             # OpenSTA timing constraints (ASAP 7nm)
+│   ├── run_flow.sh               # SkyWater synth + STA automation
+│   ├── run_asap7.sh              # ASAP 7nm synth + STA automation
+│   └── sweep_fmax.sh             # Fmax binary sweep script
 └── docs/
     └── (architecture diagrams)
 ```
 
-> `tag_array.sv` and `data_array.sv` are kept for reference. They are **not instantiated** in `cache_top.sv` due to an Icarus Verilog limitation where `always_comb` does not re-trigger when internal arrays are updated via NBA in sub-modules. Storage is inlined into `cache_top.sv` with generate-based assign reads.
+> Tag and data storage are **inlined** into `cache_top.sv` with generate-based assign reads — a workaround for an Icarus Verilog limitation where `always_comb` does not re-trigger when internal arrays are updated via NBA in sub-modules.
 
 ## Running
 
@@ -164,12 +166,19 @@ verilator --lint-only -Wall -Wno-UNUSEDPARAM \
     rtl/cache_pkg.sv rtl/cache_top.sv
 ```
 
-### Synthesis + STA
+### Synthesis + STA (SkyWater 130nm)
 
 ```bash
 cd syn/
 ./run_flow.sh          # Single-frequency synthesis + timing
 ./sweep_fmax.sh        # Fmax sweep across frequency range
+```
+
+### Synthesis + STA (ASAP 7nm)
+
+```bash
+cd syn/
+./run_asap7.sh         # ASAP 7nm synthesis + area report
 ```
 
 ## License
