@@ -1,0 +1,17 @@
+# Yosys synthesis — cache_top → ASAP7 7nm (RVT, TT corner)
+read_verilog -sv cache_top_flat.sv
+hierarchy -top cache_top
+proc
+flatten
+opt -full
+fsm
+opt
+memory
+opt
+techmap
+dfflibmap -liberty asap7_libs/asap7_merged_RVT_TT.lib
+abc -liberty asap7_libs/asap7_merged_RVT_TT.lib
+opt_clean -purge
+stat -liberty asap7_libs/asap7_merged_RVT_TT.lib
+tee -o reports/area_asap7.rpt stat -liberty asap7_libs/asap7_merged_RVT_TT.lib
+write_verilog -noattr netlists/cache_top_asap7.v

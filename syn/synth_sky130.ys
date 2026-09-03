@@ -1,0 +1,42 @@
+# ============================================================
+# Yosys synthesis — cache_top → Skywater 130nm (sky130_fd_sc_hd)
+# ============================================================
+# Usage:
+#   yosys synth_sky130.ys
+#
+# Requires:
+#   - sky130_fd_sc_hd__tt_025C_1v80.lib in this directory
+#     (or update the path below)
+# ============================================================
+
+# ── Read design ──
+read_verilog -sv cache_top_flat.sv
+
+# ── Elaborate ──
+hierarchy -top cache_top
+
+# ── High-level synthesis ──
+proc
+flatten
+opt -full
+fsm
+opt
+
+# ── Map memories to FFs (no SRAM macro in this flow) ──
+memory
+opt
+
+# ── Technology mapping to sky130 ──
+techmap
+dfflibmap -liberty sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty sky130_fd_sc_hd__tt_025C_1v80.lib -constr abc.constr
+
+# ── Final cleanup ──
+opt_clean -purge
+
+# ── Reports ──
+stat -liberty sky130_fd_sc_hd__tt_025C_1v80.lib
+tee -o reports/area_sky130.rpt stat -liberty sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# ── Write outputs ──
+write_verilog -noattr netlists/cache_top_sky130.v
