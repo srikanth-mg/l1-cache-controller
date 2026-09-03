@@ -1,0 +1,43 @@
+# Simulation
+*.vcd
+*.fst
+*.lxt
+*.vvp
+*.out
+*.log
+
+# Verilator
+obj_dir/
+
+# Yosys / Synthesis
+*.blif
+*.edif
+synth_out/
+*.synth.v
+
+# OpenSTA
+*.rpt
+
+# OpenROAD / OpenLane
+runs/
+*.odb
+*.def
+
+# Liberty (large, downloadable)
+*.lib
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
