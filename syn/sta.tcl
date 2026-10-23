@@ -1,5 +1,5 @@
 # ============================================================
-# OpenSTA timing analysis — cache_top on Skywater 130nm
+# OpenSTA timing analysis - cache_top on Skywater 130nm
 # ============================================================
 # Usage:
 #   sta sta.tcl

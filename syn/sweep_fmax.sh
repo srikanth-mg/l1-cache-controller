@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-# Fmax sweep — runs OpenSTA at multiple clock periods
+# Fmax sweep - runs OpenSTA at multiple clock periods
 # Usage: ./sweep_fmax.sh
 # ============================================================
 
@@ -8,7 +8,7 @@ PERIODS="10.0 8.0 7.5 7.2 7.0 6.5 6.0"
 
 echo ""
 echo "═══════════════════════════════════════════════════════"
-echo "  Fmax SWEEP — Sky130 cache_top"
+echo "  Fmax SWEEP - Sky130 cache_top"
 echo "═══════════════════════════════════════════════════════"
 echo ""
 printf "%-12s %-12s %-15s %-10s\n" "Period(ns)" "Freq(MHz)" "Setup Slack" "Result"

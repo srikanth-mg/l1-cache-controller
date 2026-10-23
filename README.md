@@ -63,11 +63,11 @@ All geometry parameters (`NUM_WAYS`, `NUM_SETS`, `LINE_SIZE`, `ADDR_WIDTH`, `DAT
 
 ## Interfaces
 
-**CPU Side** — Simple valid/ready handshake:
+**CPU Side** - Simple valid/ready handshake:
 - `cpu_req_valid`, `cpu_req_ready`, `cpu_req_addr[31:0]`, `cpu_req_wdata[31:0]`, `cpu_req_we`, `cpu_req_be[3:0]`
 - `cpu_resp_valid`, `cpu_resp_rdata[31:0]`
 
-**Memory Side** — 4-beat burst, valid/ready handshake:
+**Memory Side** - 4-beat burst, valid/ready handshake:
 - `mem_req_valid`, `mem_req_ready`, `mem_req_addr[31:0]`, `mem_req_wdata[31:0]`, `mem_req_we`
 - `mem_resp_valid`, `mem_resp_rdata[31:0]`
 
@@ -102,7 +102,7 @@ The testbench (`tb/tb_cache_top.sv`) uses a behavioral memory model with configu
 | Area            | ~1.63 mm²            |
 | Sequential %    | 48.36%               |
 
-**Critical path**: Tag compare → hit detect → 4-way data mux → word select → `cpu_resp_rdata` output.
+**Critical path**: Tag compare -> hit detect -> 4-way data mux -> word select -> `cpu_resp_rdata` output.
 
 Fmax sweep from 100–143 MHz confirms 138.8 MHz as the maximum with positive slack. 142.8 MHz (7.0 ns period) fails at −0.18 ns.
 
@@ -114,7 +114,7 @@ Fmax sweep from 100–143 MHz confirms 138.8 MHz as the maximum with positive sl
 | Cells           | 173,717              |
 | Flops           | 39,201 (52.45% seq)  |
 
-> **Note**: ASAP 7nm timing is not reported — Yosys maps minimum-drive cells only, and without buffer insertion / gate resizing (requires OpenROAD), timing numbers are not meaningful. ASAP 7nm is used here for **cross-node area comparison only** (~74× smaller than SkyWater 130nm).
+> **Note**: ASAP 7nm timing is not reported - Yosys maps minimum-drive cells only, and without buffer insertion / gate resizing (requires OpenROAD), timing numbers are not meaningful. ASAP 7nm is used here for **cross-node area comparison only** (~74× smaller than SkyWater 130nm).
 
 ### Tools
 
@@ -145,7 +145,7 @@ l1-cache-controller/
     └── (architecture diagrams)
 ```
 
-> Tag and data storage are **inlined** into `cache_top.sv` with generate-based assign reads — a workaround for an Icarus Verilog limitation where `always_comb` does not re-trigger when internal arrays are updated via NBA in sub-modules.
+> Tag and data storage are **inlined** into `cache_top.sv` with generate-based assign reads - a workaround for an Icarus Verilog limitation where `always_comb` does not re-trigger when internal arrays are updated via NBA in sub-modules.
 
 ## Running
 

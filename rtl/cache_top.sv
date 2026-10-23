@@ -72,7 +72,7 @@ module cache_top
   end
 
   // ════════════════════════════════════════════
-  //  Tag storage (inlined — Icarus-safe)
+  //  Tag storage (inlined - Icarus-safe)
   // ════════════════════════════════════════════
   logic [NUM_WAYS-1:0] valid_arr [NUM_SETS];
   logic [NUM_WAYS-1:0] dirty_arr [NUM_SETS];
@@ -83,7 +83,7 @@ module cache_top
   logic [NUM_WAYS-1:0] tag_rd_dirty;
   logic [TAG_W-1:0]    tag_rd_tag [NUM_WAYS];
 
-  // Generate-based reads (continuous assigns — Icarus-safe)
+  // Generate-based reads (continuous assigns - Icarus-safe)
   assign tag_rd_valid = valid_arr[lat_index];
   assign tag_rd_dirty = dirty_arr[lat_index];
 
@@ -115,7 +115,7 @@ module cache_top
   end
 
   // ════════════════════════════════════════════
-  //  Data storage (inlined — Icarus-safe)
+  //  Data storage (inlined - Icarus-safe)
   // ════════════════════════════════════════════
   logic [DATA_WIDTH-1:0] data_arr [NUM_SETS][NUM_WAYS][WORDS_PER_LINE];
 
@@ -124,7 +124,7 @@ module cache_top
   logic [WORD_OFFSET_W-1:0] data_rd_word;
   logic [DATA_WIDTH-1:0]    data_rd [NUM_WAYS];
 
-  // Generate-based reads (continuous assigns — Icarus-safe)
+  // Generate-based reads (continuous assigns - Icarus-safe)
   generate
     for (gi = 0; gi < NUM_WAYS; gi++) begin : gen_data_rd
       assign data_rd[gi] = data_arr[data_rd_idx][gi][data_rd_word];
@@ -138,7 +138,7 @@ module cache_top
   logic [BE_WIDTH-1:0]       data_wr_be;
   logic [DATA_WIDTH-1:0]     data_wr_data;
 
-  // Data write with byte enables — no reset needed
+  // Data write with byte enables - no reset needed
   always_ff @(posedge clk) begin
     if (data_wr_en) begin
       for (int b = 0; b < BE_WIDTH; b++) begin
@@ -167,7 +167,7 @@ module cache_top
   end
 
   // ════════════════════════════════════════════
-  //  PLRU — tree-based, 3 bits per set for 4-way
+  //  PLRU - tree-based, 3 bits per set for 4-way
   // ════════════════════════════════════════════
   logic [PLRU_BITS-1:0] plru_arr [NUM_SETS];
   logic [PLRU_BITS-1:0] plru_cur;

@@ -1,4 +1,4 @@
-# Yosys synthesis — cache_top → ASAP7 7nm (RVT, TT corner)
+# Yosys synthesis - cache_top -> ASAP7 7nm (RVT, TT corner)
 read_verilog -sv cache_top_flat.sv
 hierarchy -top cache_top
 proc

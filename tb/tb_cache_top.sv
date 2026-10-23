@@ -106,13 +106,13 @@ module tb_cache_top;
   parameter TIMEOUT = 50_000;
   initial begin
     #(TIMEOUT * 10);
-    $display("\n[TIMEOUT] Simulation exceeded %0d ns — hanging.", TIMEOUT * 10);
+    $display("\n[TIMEOUT] Simulation exceeded %0d ns - hanging.", TIMEOUT * 10);
     $finish;
   end
 
   // ════════════════════════════════════════════
   //  CPU driver tasks
-  //  Drive on negedge, sample on posedge — no race conditions
+  //  Drive on negedge, sample on posedge - no race conditions
   // ════════════════════════════════════════════
 
   task automatic cpu_read(
@@ -247,7 +247,7 @@ module tb_cache_top;
 
     // ════════════════════════════════════════
     //  TEST 1: Cold-start compulsory misses
-    //  4 reads to set 0, each a different tag → fills all 4 ways
+    //  4 reads to set 0, each a different tag -> fills all 4 ways
     // ════════════════════════════════════════
     $display("\n══════ TEST 1: Cold-start compulsory misses (set 0) ══════");
     check_read("compulsory miss tag0", make_addr(0, 0, 0));  // way 0
@@ -257,7 +257,7 @@ module tb_cache_top;
 
     // ════════════════════════════════════════
     //  TEST 2: Read hits
-    //  Same addresses → all should hit now
+    //  Same addresses -> all should hit now
     // ════════════════════════════════════════
     $display("\n══════ TEST 2: Read hits ══════");
     check_read("read hit tag0", make_addr(0, 0, 0));
@@ -295,7 +295,7 @@ module tb_cache_top;
     // ════════════════════════════════════════
     //  TEST 6: Dirty eviction
     //  Set 0 has 4 ways full (tag0-3). Tag1 is dirty.
-    //  Access tag4 → PLRU victim gets evicted (writeback if dirty) → allocate tag4
+    //  Access tag4 -> PLRU victim gets evicted (writeback if dirty) -> allocate tag4
     // ════════════════════════════════════════
     $display("\n══════ TEST 6: Dirty eviction (conflict miss) ══════");
     check_read("conflict miss tag4", make_addr(4, 0, 0));
@@ -306,7 +306,7 @@ module tb_cache_top;
 
     // ════════════════════════════════════════
     //  TEST 7: Write-allocate miss
-    //  Write to a tag not in cache → miss → allocate → write
+    //  Write to a tag not in cache -> miss -> allocate -> write
     // ════════════════════════════════════════
     $display("\n══════ TEST 7: Write-allocate miss ══════");
     checked_write("write-alloc miss", make_addr(5, 1, 0), 32'hDEAD_BEEF, 4'hF);
@@ -334,9 +334,9 @@ module tb_cache_top;
 
     // ════════════════════════════════════════
     //  TEST 10: Full set thrash (PLRU stress)
-    //  Cycle through 6 tags in set 10 → exercises all eviction paths
+    //  Cycle through 6 tags in set 10 -> exercises all eviction paths
     // ════════════════════════════════════════
-    $display("\n══════ TEST 10: Set thrash — PLRU stress (set 10) ══════");
+    $display("\n══════ TEST 10: Set thrash - PLRU stress (set 10) ══════");
     for (int t = 0; t < 6; t++)
       check_read($sformatf("thrash tag%0d", t), make_addr(t, 10, 0));
 
@@ -349,7 +349,7 @@ module tb_cache_top;
     //  TEST 11: Write then evict, read from memory
     //  Ensures dirty data survives the writeback round-trip
     // ════════════════════════════════════════
-    $display("\n══════ TEST 11: Write → evict → re-read (writeback integrity) ══════");
+    $display("\n══════ TEST 11: Write -> evict -> re-read (writeback integrity) ══════");
     // Fill set 20 (ways 0-3)
     for (int t = 0; t < 4; t++)
       check_read($sformatf("fill set20 tag%0d", t), make_addr(t, 20, 0));
@@ -361,7 +361,7 @@ module tb_cache_top;
     for (int t = 4; t < 8; t++)
       check_read($sformatf("evict set20 tag%0d", t), make_addr(t, 20, 0));
 
-    // Read tag0 back — should come from memory with the dirty writeback value
+    // Read tag0 back - should come from memory with the dirty writeback value
     check_read("re-read evicted tag0", make_addr(0, 20, 0));
 
     // ════════════════════════════════════════

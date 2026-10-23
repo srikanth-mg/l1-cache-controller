@@ -26,7 +26,7 @@ echo "═══ All 5 ASAP7 libs found ═══"
 
 # ── Step 1: Generate Yosys script ──
 cat > synth_asap7.ys << EOF
-# Yosys synthesis — cache_top → ASAP7 7nm (RVT, TT corner)
+# Yosys synthesis - cache_top -> ASAP7 7nm (RVT, TT corner)
 read_verilog -sv cache_top_flat.sv
 hierarchy -top cache_top
 proc
@@ -48,7 +48,7 @@ EOF
 # ── Step 2: Run Yosys ──
 echo ""
 echo "═══════════════════════════════════════════════════════"
-echo "  Running Yosys synthesis — ASAP7 7nm"
+echo "  Running Yosys synthesis - ASAP7 7nm"
 echo "═══════════════════════════════════════════════════════"
 yosys synth_asap7.ys
 
@@ -106,14 +106,14 @@ EOF
 # ── Step 4: Run STA at 500 MHz baseline ──
 echo ""
 echo "═══════════════════════════════════════════════════════"
-echo "  Running OpenSTA — ASAP7 7nm (500 MHz baseline)"
+echo "  Running OpenSTA - ASAP7 7nm (500 MHz baseline)"
 echo "═══════════════════════════════════════════════════════"
 sta sta_asap7.tcl
 
 # ── Step 5: Fmax sweep ──
 echo ""
 echo "═══════════════════════════════════════════════════════"
-echo "  Fmax SWEEP — ASAP7 7nm cache_top"
+echo "  Fmax SWEEP - ASAP7 7nm cache_top"
 echo "═══════════════════════════════════════════════════════"
 echo ""
 PERIODS="2.0 1.5 1.2 1.0 0.9 0.8 0.7 0.6 0.5"

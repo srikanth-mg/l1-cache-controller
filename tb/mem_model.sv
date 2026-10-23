@@ -66,13 +66,13 @@ module mem_model #(
         M_IDLE: begin
           if (req_valid && req_ready) begin
             if (req_we) begin
-              // Write beat — store and stay IDLE for next beat
+              // Write beat - store and stay IDLE for next beat
               storage[req_addr]   = req_wdata[7:0];
               storage[req_addr+1] = req_wdata[15:8];
               storage[req_addr+2] = req_wdata[23:16];
               storage[req_addr+3] = req_wdata[31:24];
             end else begin
-              // Read request — start latency countdown
+              // Read request - start latency countdown
               burst_base <= req_addr;
               if (LATENCY <= 1) begin
                 mstate    <= M_BURST;

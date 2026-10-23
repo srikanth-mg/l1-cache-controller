@@ -1,5 +1,5 @@
 # ============================================================
-# Yosys synthesis — cache_top → Skywater 130nm (sky130_fd_sc_hd)
+# Yosys synthesis - cache_top -> Skywater 130nm (sky130_fd_sc_hd)
 # ============================================================
 # Usage:
 #   yosys synth_sky130.ys
